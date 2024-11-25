@@ -30,6 +30,7 @@ public class KasirCafe extends javax.swing.JFrame {
         model.addColumn("No");
         model.addColumn("ID Menu");
         model.addColumn("Menu");
+        model.addColumn("Harga");
         model.addColumn("Kategori");
         model.addColumn("QTY");
         model.addColumn("SubTotal");
@@ -71,7 +72,7 @@ public class KasirCafe extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabelNamaBarang = new javax.swing.JLabel();
+        jLabelMenu = new javax.swing.JLabel();
         jTextFieldItem = new javax.swing.JTextField();
         jLabelUkuran = new javax.swing.JLabel();
         jLabelHarga = new javax.swing.JLabel();
@@ -107,8 +108,8 @@ public class KasirCafe extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Item : ");
 
-        jLabelNamaBarang.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabelNamaBarang.setText("Menu     :");
+        jLabelMenu.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabelMenu.setText("Menu     :");
 
         jTextFieldItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -207,7 +208,7 @@ public class KasirCafe extends javax.swing.JFrame {
                                     .addComponent(jTextFieldItem, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabelTotal)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabelNamaBarang)
+                                        .addComponent(jLabelMenu)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jLabelOutputMenu))
                                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -275,7 +276,7 @@ public class KasirCafe extends javax.swing.JFrame {
                                 .addComponent(jTextFieldItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabelNamaBarang)
+                                    .addComponent(jLabelMenu)
                                     .addComponent(jLabelOutputMenu))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -387,7 +388,7 @@ public class KasirCafe extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    Object[] tempMenu = new Object[6];
+    Object[] tempMenu = new Object[7];
     private int tempNomor = 1;
     private double tempHarga = 0;
     private double totalHarga = 0;
@@ -397,11 +398,49 @@ public class KasirCafe extends javax.swing.JFrame {
     
     private void jButtonTambahkanItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTambahkanItemActionPerformed
         // TODO add your handling code here:
-        totalHarga = totalHarga + (double)tempMenu[5];
-        model.addRow(tempMenu);
-        jLabelTotalBelanja.setText(String.valueOf(totalHarga));
-        tempHarga = 0;
-        tempNomor++;
+        //ditambai if stok habis
+        int stok = 0;
+        try {
+            // Buka koneksi ke database
+            buka_koneksi();
+
+            // Membuat statement untuk eksekusi SQL
+            Statement s = koneksi.createStatement();
+
+            // Query untuk mendapatkan menu berdasarkan ID
+            String sql = "SELECT stok FROM menu WHERE id = " + tempMenu[1];
+            ResultSet r = s.executeQuery(sql);
+            
+            // Periksa apakah hasil query tidak kosong
+            if (r.next()) { // Menggunakan r.next() untuk memindahkan pointer ke baris data pertama
+                stok = r.getInt("stok");
+            } else {
+                // Jika ID tidak ditemukan, tampilkan pesan
+                JOptionPane.showMessageDialog(this, "Menu dengan ID " + tempMenu[1] + " tidak ditemukan.", "Info", JOptionPane.INFORMATION_MESSAGE);
+            } 
+            
+            // Tutup result set dan statement
+            r.close();
+            s.close();
+        } catch (SQLException e) {
+            // Tampilkan pesan kesalahan jika terjadi masalah
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        if (stok >= (int)tempMenu[5]){
+            tempMenu[0] = tempNomor;
+            tempNomor = tempNomor + 1;
+            totalHarga = totalHarga + (double)tempMenu[6];
+            model.addRow(tempMenu);
+            jLabelTotalBelanja.setText(String.valueOf(totalHarga));
+            tempHarga = 0; 
+        } else if (stok == 0){  
+            JOptionPane.showMessageDialog(this, "Menu " + tempMenu[2] +" Sudah Habis", "Info", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Menu " + tempMenu[2] +" hanya tersisa " + stok, "Info", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        
     }//GEN-LAST:event_jButtonTambahkanItemActionPerformed
 
     private void jTextFieldQtyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldQtyActionPerformed
@@ -414,8 +453,8 @@ public class KasirCafe extends javax.swing.JFrame {
             double total = tempHarga * qty;
             
             jLabelTotal.setText(String.valueOf(total));
-            tempMenu[4] = qty;
-            tempMenu[5] = total;
+            tempMenu[5] = qty;
+            tempMenu[6] = total;
         } catch (NumberFormatException e) {
             // Handle the case where the input is not a valid number
             JOptionPane.showMessageDialog(this, "Input harus berupa angka!", "Input Error", JOptionPane.ERROR_MESSAGE);
@@ -424,6 +463,61 @@ public class KasirCafe extends javax.swing.JFrame {
 
     private void jButtonBayarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBayarActionPerformed
         // TODO add your handling code here:
+        try {
+            // Buka koneksi ke database
+            buka_koneksi();
+
+            // Membuat statement untuk eksekusi SQL
+            Statement s = koneksi.createStatement();
+
+            // Query untuk menambahkan data penjualan
+            String sql = "INSERT INTO penjualan (tanggal) VALUES (NOW())";
+            s.executeUpdate(sql);  // Gunakan executeUpdate() untuk INSERT
+
+            // Mendapatkan ID penjualan terakhir yang baru saja dimasukkan
+            ResultSet rs = s.executeQuery("SELECT LAST_INSERT_ID()");
+            rs.next();
+            int idPenjualan = rs.getInt(1); // Mendapatkan ID penjualan terakhir
+
+            // Mengambil jumlah baris dan kolom dari model
+            int rowCount = model.getRowCount();
+            int columnCount = model.getColumnCount();
+
+            // Membuat array 2 dimensi untuk menampung data tabel
+            Object[][] tableData = new Object[rowCount][columnCount];
+            for (int row = 0; row < rowCount; row++) {
+                for (int col = 0; col < columnCount; col++) {
+                    tableData[row][col] = model.getValueAt(row, col);
+                }
+            }
+
+            // Loop untuk memasukkan data detail penjualan
+            for (int row = 0; row < rowCount; row++) {
+                String sqlDetail = "INSERT INTO detail_penjualan (id_penjualan, id_menu, harga_menu, qty, total_harga) " +
+                        "VALUES (" + idPenjualan + ", " + tableData[row][1] + ", " + tableData[row][3] + ", " + tableData[row][5] + ", " + (Double.parseDouble(tableData[row][3].toString()) * Integer.parseInt(tableData[row][5].toString())) + ")";
+                s.executeUpdate(sqlDetail); // Gunakan executeUpdate() untuk INSERT
+                String sqlStok = "UPDATE menu SET stok = stok - " + tableData[row][5] + " WHERE id = " + tableData[row][1];
+                s.executeUpdate(sqlStok);
+            }
+
+            // Tutup result set dan statement
+            rs.close();
+            s.close();
+            tempNomor = 1;
+            model.setRowCount(0);
+            jLabelOutputMenu.setText("");
+            jLabelOutputKategori.setText("");
+            jLabelOutputUkuran.setText("");
+            jLabelOutputHarga.setText("");
+            jLabelTotal.setText("");
+            jTextFieldItem.setText("");
+            jTextFieldQty.setText("");
+            
+            JOptionPane.showMessageDialog(this, "Sudah Dibayar", "Informasi", JOptionPane.INFORMATION_MESSAGE);            
+        } catch (SQLException e) {
+            // Tampilkan pesan kesalahan jika terjadi masalah
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } 
     }//GEN-LAST:event_jButtonBayarActionPerformed
 
     private void jButtonBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBatalActionPerformed
@@ -443,8 +537,8 @@ public class KasirCafe extends javax.swing.JFrame {
             // Konversi teks menjadi integer (asumsi ID adalah integer)
             int id = Integer.parseInt(idText);
 
-            // Panggil fungsi getBarang dengan parameter id
-            getBarang(id);
+            // Panggil fungsi getMenu dengan parameter id
+            getMenu(id);
         } catch (NumberFormatException e) {
             // Tampilkan pesan jika input bukan angka
             JOptionPane.showMessageDialog(this, "ID harus berupa angka!", "Input Error", JOptionPane.ERROR_MESSAGE);
@@ -452,7 +546,7 @@ public class KasirCafe extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldItemActionPerformed
     
     
-    private void getBarang(int id){
+    private void getMenu(int id){
         try {
             // Buka koneksi ke database
             buka_koneksi();
@@ -460,26 +554,26 @@ public class KasirCafe extends javax.swing.JFrame {
             // Membuat statement untuk eksekusi SQL
             Statement s = koneksi.createStatement();
 
-            // Query untuk mendapatkan barang berdasarkan ID
-            String sql = "SELECT b.id AS id_barang, b.nama_barang, b.ukuran, b.harga, b.stok, k.nama AS kategori "
-                    + "FROM barang b JOIN  kategori k ON b.kategori_id = k.id WHERE b.id = " + id;
+            // Query untuk mendapatkan menu berdasarkan ID
+            String sql = "SELECT b.id AS id_menu, b.nama_menu, b.ukuran, b.harga, b.stok, k.nama AS kategori "
+                    + "FROM menu b JOIN  kategori k ON b.kategori_id = k.id WHERE b.id = " + id;
             ResultSet r = s.executeQuery(sql);
 
             // Periksa apakah hasil query tidak kosong
             if (r.next()) { // Menggunakan r.next() untuk memindahkan pointer ke baris data pertama
-                jLabelOutputMenu.setText(r.getString("nama_barang"));
+                jLabelOutputMenu.setText(r.getString("nama_menu"));
                 jLabelOutputUkuran.setText(r.getString("ukuran"));
                 jLabelOutputHarga.setText(r.getString("harga"));
                 jLabelOutputKategori.setText(r.getString("kategori"));
-                tempMenu[0] = tempNomor;
-                tempMenu[1] = r.getString("id_barang");
-                tempMenu[2] = r.getString("nama_barang");
+                tempMenu[1] = r.getString("id_menu");
+                tempMenu[2] = r.getString("nama_menu");
+                tempMenu[3] = r.getString("harga");
                 tempHarga = r.getDouble("harga");
-                tempMenu[3] = r.getString("kategori");
+                tempMenu[4] = r.getString("kategori");
             } else {
                 // Jika ID tidak ditemukan, tampilkan pesan
-                JOptionPane.showMessageDialog(this, "Barang dengan ID " + id + " tidak ditemukan.", "Info", JOptionPane.INFORMATION_MESSAGE);
-                jLabelNamaBarang.setText("Nama Barang: Tidak ditemukan");
+                JOptionPane.showMessageDialog(this, "Menu dengan ID " + id + " tidak ditemukan.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                jLabelOutputMenu.setText("Nama menu: Tidak ditemukan");
                 jLabelUkuran.setText("Ukuran: Tidak ditemukan");
             }
 
@@ -540,7 +634,7 @@ public class KasirCafe extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelHarga;
     private javax.swing.JLabel jLabelKategori;
-    private javax.swing.JLabel jLabelNamaBarang;
+    private javax.swing.JLabel jLabelMenu;
     private javax.swing.JLabel jLabelOutputHarga;
     private javax.swing.JLabel jLabelOutputKategori;
     private javax.swing.JLabel jLabelOutputMenu;

@@ -24,3 +24,8 @@ CREATE TABLE penjualan (
     tanggal DATETIME NOT NULL,
     FOREIGN KEY (id_barang) REFERENCES barang(id)
 );
+
+
+
+
+INSERT INTO detail_penjualan (id, id_penjualan, id_menu, qty, harga_barang, total_harga, tanggal)
