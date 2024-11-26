@@ -20,11 +20,17 @@ import javax.swing.table.DefaultTableModel;
 public class KasirCafe extends javax.swing.JFrame {
     private static Connection koneksi;
     private DefaultTableModel model;
+    private DefaultTableModel modelRevenue;
+    private DefaultTableModel modelKategori;
+    private DefaultTableModel modelMenu;
     /**
      * Creates new form KasirCafe
      */
     public KasirCafe() {
         model = new DefaultTableModel();
+        modelRevenue = new DefaultTableModel();
+        modelKategori = new DefaultTableModel();
+        modelMenu = new DefaultTableModel();
         initComponents();
         this.jTableItem.setModel(model);
         model.addColumn("No");
@@ -34,6 +40,31 @@ public class KasirCafe extends javax.swing.JFrame {
         model.addColumn("Kategori");
         model.addColumn("QTY");
         model.addColumn("SubTotal");
+        this.jTableRevenue.setModel(modelRevenue);
+        modelRevenue.addColumn("Tanggal");
+        modelRevenue.addColumn("Jumlah Penjualan");
+        modelRevenue.addColumn("Total Revenue");
+        
+        addColoumnKategori(modelKategori);
+        tampilkanKategori();
+        
+        addColoumnMenu(modelMenu);
+        tampilkanRevenue();
+    }
+    
+    private void addColoumnKategori(DefaultTableModel modelKategori){
+        this.jTableKategori.setModel(modelKategori);
+        modelKategori.addColumn("ID");
+        modelKategori.addColumn("Kategori");
+    }
+    
+    private void addColoumnMenu(DefaultTableModel modelMenu){
+        this.jTableMenu.setModel(modelMenu);
+        modelMenu.addColumn("ID Menu");
+        modelMenu.addColumn("Nama Menu");
+        modelMenu.addColumn("Ukuran");
+        modelMenu.addColumn("Harga");
+        modelMenu.addColumn("Stok");
     }
     
     public static void buka_koneksi() {
@@ -94,8 +125,12 @@ public class KasirCafe extends javax.swing.JFrame {
         jLabelOutputKategori = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTableKategori = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTableMenu = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        jButtonRefreshKategori = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableRevenue = new javax.swing.JTable();
@@ -103,7 +138,7 @@ public class KasirCafe extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("Penjualan Cafe Istimewa");
+        jLabel1.setText("Penjualan Cafe Es Kopi Anget");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Item : ");
@@ -244,7 +279,7 @@ public class KasirCafe extends javax.swing.JFrame {
                                 .addGap(46, 46, 46))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 46, Short.MAX_VALUE))))))
+                                .addGap(0, 111, Short.MAX_VALUE))))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -304,34 +339,82 @@ public class KasirCafe extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Items", jPanel3);
 
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel11.setText("Daftar Menu");
 
-        jLabel12.setText("Makanan : ");
+        jTableKategori.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "ID", "Kategori"
+            }
+        ));
+        jScrollPane4.setViewportView(jTableKategori);
 
-        jLabel13.setText("Minuman :");
+        jTableMenu.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "ID Menu", "Nama Menu", "Ukuran", "Harga", "Stok"
+            }
+        ));
+        jScrollPane3.setViewportView(jTableMenu);
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel3.setText("Daftar Kategori");
+
+        jButtonRefreshKategori.setText("Refresh");
+        jButtonRefreshKategori.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRefreshKategoriActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel11))
-                .addContainerGap(883, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButtonRefreshKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(40, 40, 40)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(41, 41, 41))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addComponent(jLabel11)
-                .addGap(47, 47, 47)
-                .addComponent(jLabel12)
-                .addGap(143, 143, 143)
-                .addComponent(jLabel13)
-                .addContainerGap(182, Short.MAX_VALUE))
+                .addGap(17, 17, 17)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonRefreshKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Kategori", jPanel1);
@@ -355,15 +438,15 @@ public class KasirCafe extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(27, 27, 27)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 919, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(161, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Revenue", jPanel2);
@@ -372,17 +455,17 @@ public class KasirCafe extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(49, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 978, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1044, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(39, 39, 39)
+                .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(104, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         pack();
@@ -463,61 +546,68 @@ public class KasirCafe extends javax.swing.JFrame {
 
     private void jButtonBayarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBayarActionPerformed
         // TODO add your handling code here:
-        try {
+        if (model.getRowCount() == 0){
+            JOptionPane.showMessageDialog(this, "Tambahkan dulu yang mau dibeli", "Info", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            try {
             // Buka koneksi ke database
-            buka_koneksi();
+                buka_koneksi();
 
-            // Membuat statement untuk eksekusi SQL
-            Statement s = koneksi.createStatement();
+                // Membuat statement untuk eksekusi SQL
+                Statement s = koneksi.createStatement();
 
-            // Query untuk menambahkan data penjualan
-            String sql = "INSERT INTO penjualan (tanggal) VALUES (NOW())";
-            s.executeUpdate(sql);  // Gunakan executeUpdate() untuk INSERT
+                // Query untuk menambahkan data penjualan
+                String sql = "INSERT INTO penjualan (tanggal) VALUES (NOW())";
+                s.executeUpdate(sql);  // Gunakan executeUpdate() untuk INSERT
 
-            // Mendapatkan ID penjualan terakhir yang baru saja dimasukkan
-            ResultSet rs = s.executeQuery("SELECT LAST_INSERT_ID()");
-            rs.next();
-            int idPenjualan = rs.getInt(1); // Mendapatkan ID penjualan terakhir
+                // Mendapatkan ID penjualan terakhir yang baru saja dimasukkan
+                ResultSet rs = s.executeQuery("SELECT LAST_INSERT_ID()");
+                rs.next();
+                int idPenjualan = rs.getInt(1); // Mendapatkan ID penjualan terakhir
 
-            // Mengambil jumlah baris dan kolom dari model
-            int rowCount = model.getRowCount();
-            int columnCount = model.getColumnCount();
+                // Mengambil jumlah baris dan kolom dari model
+                int rowCount = model.getRowCount();
+                int columnCount = model.getColumnCount();
 
-            // Membuat array 2 dimensi untuk menampung data tabel
-            Object[][] tableData = new Object[rowCount][columnCount];
-            for (int row = 0; row < rowCount; row++) {
-                for (int col = 0; col < columnCount; col++) {
-                    tableData[row][col] = model.getValueAt(row, col);
+                // Membuat array 2 dimensi untuk menampung data tabel
+                Object[][] tableData = new Object[rowCount][columnCount];
+                for (int row = 0; row < rowCount; row++) {
+                    for (int col = 0; col < columnCount; col++) {
+                        tableData[row][col] = model.getValueAt(row, col);
+                    }
                 }
-            }
 
-            // Loop untuk memasukkan data detail penjualan
-            for (int row = 0; row < rowCount; row++) {
-                String sqlDetail = "INSERT INTO detail_penjualan (id_penjualan, id_menu, harga_menu, qty, total_harga) " +
-                        "VALUES (" + idPenjualan + ", " + tableData[row][1] + ", " + tableData[row][3] + ", " + tableData[row][5] + ", " + (Double.parseDouble(tableData[row][3].toString()) * Integer.parseInt(tableData[row][5].toString())) + ")";
-                s.executeUpdate(sqlDetail); // Gunakan executeUpdate() untuk INSERT
-                String sqlStok = "UPDATE menu SET stok = stok - " + tableData[row][5] + " WHERE id = " + tableData[row][1];
-                s.executeUpdate(sqlStok);
-            }
+                // Loop untuk memasukkan data detail penjualan
+                for (int row = 0; row < rowCount; row++) {
+                    String sqlDetail = "INSERT INTO detail_penjualan (id_penjualan, id_menu, harga_menu, qty, total_harga) " +
+                            "VALUES (" + idPenjualan + ", " + tableData[row][1] + ", " + tableData[row][3] + ", " + tableData[row][5] + ", " + (Double.parseDouble(tableData[row][3].toString()) * Integer.parseInt(tableData[row][5].toString())) + ")";
+                    s.executeUpdate(sqlDetail); // Gunakan executeUpdate() untuk INSERT
+                    String sqlStok = "UPDATE menu SET stok = stok - " + tableData[row][5] + " WHERE id = " + tableData[row][1];
+                    s.executeUpdate(sqlStok);
+                }
 
-            // Tutup result set dan statement
-            rs.close();
-            s.close();
-            tempNomor = 1;
-            model.setRowCount(0);
-            jLabelOutputMenu.setText("");
-            jLabelOutputKategori.setText("");
-            jLabelOutputUkuran.setText("");
-            jLabelOutputHarga.setText("");
-            jLabelTotal.setText("");
-            jTextFieldItem.setText("");
-            jTextFieldQty.setText("");
-            
-            JOptionPane.showMessageDialog(this, "Sudah Dibayar", "Informasi", JOptionPane.INFORMATION_MESSAGE);            
-        } catch (SQLException e) {
-            // Tampilkan pesan kesalahan jika terjadi masalah
-            JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        } 
+                // Tutup result set dan statement
+                rs.close();
+                s.close();
+                tempNomor = 1;
+                model.setRowCount(0);
+                jLabelOutputMenu.setText("");
+                jLabelOutputKategori.setText("");
+                jLabelOutputUkuran.setText("");
+                jLabelOutputHarga.setText("");
+                jLabelTotal.setText("");
+                jTextFieldItem.setText("");
+                jTextFieldQty.setText("");
+                
+                tampilkanRevenue();
+
+                JOptionPane.showMessageDialog(this, "Sudah Dibayar", "Informasi", JOptionPane.INFORMATION_MESSAGE);            
+            } catch (SQLException e) {
+                // Tampilkan pesan kesalahan jika terjadi masalah
+                JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } 
+        }
+        
     }//GEN-LAST:event_jButtonBayarActionPerformed
 
     private void jButtonBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBatalActionPerformed
@@ -544,6 +634,14 @@ public class KasirCafe extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "ID harus berupa angka!", "Input Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jTextFieldItemActionPerformed
+
+    private void jButtonRefreshKategoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshKategoriActionPerformed
+        // TODO add your handling code here:
+        modelKategori.setRowCount(0);
+        modelMenu.setRowCount(0);
+        tampilkanKategori();
+//        getMenuByKategori(1);
+    }//GEN-LAST:event_jButtonRefreshKategoriActionPerformed
     
     
     private void getMenu(int id){
@@ -577,6 +675,119 @@ public class KasirCafe extends javax.swing.JFrame {
                 jLabelUkuran.setText("Ukuran: Tidak ditemukan");
             }
 
+            // Tutup result set dan statement
+            r.close();
+            s.close();
+        } catch (SQLException e) {
+            // Tampilkan pesan kesalahan jika terjadi masalah
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    
+    private void tampilkanRevenue(){
+        modelRevenue.getDataVector().removeAllElements();
+        modelRevenue.fireTableDataChanged();
+        try {
+            // Buka koneksi ke database
+            buka_koneksi();
+
+            // Membuat statement untuk eksekusi SQL
+            Statement s = koneksi.createStatement();
+
+            // Query untuk mendapatkan menu berdasarkan ID
+            String sql = "SELECT DATE(p.tanggal) AS tanggal, COUNT(dp.id) AS jumlah_transaksi, SUM(dp.total_harga) AS total_pendapatan " +
+                "FROM penjualan p JOIN detail_penjualan dp ON p.id = dp.id_penjualan " +
+                "GROUP BY DATE(p.tanggal) ORDER BY DATE(p.tanggal);";
+            
+            ResultSet r = s.executeQuery(sql);
+
+            // Periksa apakah hasil query tidak kosong
+            while (r.next()) {
+                Object[] o = new Object[3];
+                o[0] = r.getString("tanggal");
+                o[1] = r.getString("jumlah_transaksi");
+                o[2] = r.getString("total_pendapatan");
+                modelRevenue.addRow(o);
+            }
+
+            // Tutup result set dan statement
+            r.close();
+            s.close();
+        } catch (SQLException e) {
+            // Tampilkan pesan kesalahan jika terjadi masalah
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void tampilkanKategori(){
+        try {
+            // Buka koneksi ke database
+            buka_koneksi();
+
+            // Membuat statement untuk eksekusi SQL
+            Statement s = koneksi.createStatement();
+
+            // Query untuk mendapatkan menu berdasarkan ID
+            String sql = "SELECT * FROM kategori";
+            
+            ResultSet r = s.executeQuery(sql);
+
+            // Periksa apakah hasil query tidak kosong
+            while (r.next()) {
+                Object[] o = new Object[3];
+                o[0] = r.getString("id");
+                o[1] = r.getString("nama");
+                modelKategori.addRow(o);
+            }
+
+            // Tutup result set dan statement
+            r.close();
+            s.close();
+            
+            // Tambahkan listener ke tabel kategori
+            jTableKategori.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    int row = jTableKategori.getSelectedRow(); // Mendapatkan baris yang diklik
+
+                    if (row != -1) {
+                        // Ambil ID kategori dari kolom pertama (kolom indeks 0)
+                        int idKategori = Integer.parseInt(jTableKategori.getValueAt(row, 0).toString());
+                        modelMenu.setRowCount(0);
+                        getMenuByKategori(idKategori); // Panggil metode getMenuByKategori dengan parameter
+                    }
+                }
+            });
+        } catch (SQLException e) {
+            // Tampilkan pesan kesalahan jika terjadi masalah
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void getMenuByKategori(int idKategori){
+        try {
+            // Buka koneksi ke database
+            buka_koneksi();
+
+            // Membuat statement untuk eksekusi SQL
+            Statement s = koneksi.createStatement();
+
+            // Query untuk mendapatkan menu berdasarkan ID
+            String sql = "SELECT * FROM menu WHERE kategori_id = " + idKategori;
+            
+            ResultSet r = s.executeQuery(sql);
+
+            // Periksa apakah hasil query tidak kosong
+            while (r.next()) {
+                Object[] o = new Object[5];
+                o[0] = r.getString("id");
+                o[1] = r.getString("nama_menu");
+                o[2] = r.getString("ukuran");
+                o[3] = r.getString("harga");
+                o[4] = r.getString("stok");
+                modelMenu.addRow(o);
+            }
             // Tutup result set dan statement
             r.close();
             s.close();
@@ -623,12 +834,12 @@ public class KasirCafe extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBatal;
     private javax.swing.JButton jButtonBayar;
+    private javax.swing.JButton jButtonRefreshKategori;
     private javax.swing.JButton jButtonTambahkanItem;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
@@ -647,8 +858,12 @@ public class KasirCafe extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTableItem;
+    private javax.swing.JTable jTableKategori;
+    private javax.swing.JTable jTableMenu;
     private javax.swing.JTable jTableRevenue;
     private javax.swing.JTextField jTextFieldItem;
     private javax.swing.JTextField jTextFieldQty;
