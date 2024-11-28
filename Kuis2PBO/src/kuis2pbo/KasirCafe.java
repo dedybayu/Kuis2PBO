@@ -451,9 +451,9 @@ public class KasirCafe extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(88, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabelTotalPenghasilan)
                 .addGap(12, 12, 12))
         );
@@ -473,7 +473,7 @@ public class KasirCafe extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
 
@@ -711,13 +711,25 @@ public class KasirCafe extends javax.swing.JFrame {
 
             // Periksa apakah hasil query tidak kosong
             if (r.next()) { // Menggunakan r.next() untuk memindahkan pointer ke baris data pertama
+
+                
                 jLabelOutputMenu.setText(r.getString("nama_menu"));
                 jLabelOutputUkuran.setText(r.getString("ukuran"));
-                jLabelOutputHarga.setText(r.getString("harga"));
+//                jLabelOutputHarga.setText(r.getString("harga"));
+
+                // Format total menjadi format mata uang Indonesia (Rp.)
+                NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+                String formattedHarga = format.format(r.getDouble("harga"));
+
+                // Set label dengan format yang telah diubah
+                jLabelOutputHarga.setText(formattedHarga);
+                
                 jLabelOutputKategori.setText(r.getString("kategori"));
                 tempMenu[1] = r.getString("id_menu");
                 tempMenu[2] = r.getString("nama_menu");
                 tempMenu[3] = r.getString("harga");
+                
+
                 tempHarga = r.getDouble("harga");
                 tempMenu[4] = r.getString("kategori");
             } else {
