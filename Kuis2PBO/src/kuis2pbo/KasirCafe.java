@@ -650,6 +650,7 @@ public class KasirCafe extends javax.swing.JFrame {
                 jLabelTotal.setText("");
                 jTextFieldItem.setText("");
                 jTextFieldQty.setText("");
+                jLabelTotalBelanja.setText("Rp.00");
                 
                 tampilkanRevenue();
 
