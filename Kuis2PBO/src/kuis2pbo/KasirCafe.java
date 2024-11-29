@@ -25,6 +25,7 @@ public class KasirCafe extends javax.swing.JFrame {
     private DefaultTableModel modelRevenue;
     private DefaultTableModel modelKategori;
     private DefaultTableModel modelMenu;
+    private DefaultTableModel modelHistori;
     /**
      * Creates new form KasirCafe
      */
@@ -53,6 +54,11 @@ public class KasirCafe extends javax.swing.JFrame {
         addColoumnMenu(modelMenu);
         tampilkanRevenue();
         hitungTotalPenghasilan();
+        
+        modelHistori = new DefaultTableModel();
+        modelHistori.addColumn("ID Transaksi");
+        modelHistori.addColumn("Total Pendapatan");
+        this.jTableHistori.setModel(modelHistori);
     }
     
     private void addColoumnKategori(DefaultTableModel modelKategori){
@@ -138,6 +144,11 @@ public class KasirCafe extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableRevenue = new javax.swing.JTable();
         jLabelTotalPenghasilan = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTableHistori = new javax.swing.JTable();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -279,7 +290,7 @@ public class KasirCafe extends javax.swing.JFrame {
                             .addComponent(jScrollPane1)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jButtonBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 312, Short.MAX_VALUE)
                                 .addComponent(jButtonBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(46, 46, 46))))
         );
@@ -411,7 +422,7 @@ public class KasirCafe extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
@@ -437,25 +448,73 @@ public class KasirCafe extends javax.swing.JFrame {
         jLabelTotalPenghasilan.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabelTotalPenghasilan.setText("Total Penghasilan:");
 
+        jLabel4.setText("Revenue");
+
+        jTableHistori.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "ID Transaksi", "Pendapatan"
+            }
+        ));
+        jScrollPane5.setViewportView(jTableHistori);
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "ID Transaksi", "Menu", "Qty", "TotalHarga"
+            }
+        ));
+        jScrollPane6.setViewportView(jTable2);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(27, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabelTotalPenghasilan, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 984, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabelTotalPenghasilan, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(655, 655, 655))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(561, 561, 561))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jLabel4)
+                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabelTotalPenghasilan)
-                .addGap(12, 12, 12))
+                .addGap(19, 19, 19)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabelTotalPenghasilan)
+                        .addGap(13, 13, 13))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(98, Short.MAX_VALUE))))
         );
 
         jTabbedPane1.addTab("Revenue", jPanel2);
@@ -466,8 +525,8 @@ public class KasirCafe extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1044, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -779,11 +838,58 @@ public class KasirCafe extends javax.swing.JFrame {
             // Tutup result set dan statement
             r.close();
             s.close();
+            
+            jTableRevenue.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    int row = jTableRevenue.getSelectedRow(); // Mendapatkan baris yang diklik
+
+                    if (row != -1) {
+                        // Ambil ID kategori dari kolom pertama (kolom indeks 0)
+                        String tanggal = (jTableRevenue.getValueAt(row, 0).toString());
+                        modelHistori.setRowCount(0);
+                        getPenjualanByTanggal(tanggal); // Panggil metode getMenuByKategori dengan parameter
+                    }
+                }
+            });
         } catch (SQLException e) {
             // Tampilkan pesan kesalahan jika terjadi masalah
             JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+ 
+        private void getPenjualanByTanggal(String tanggal){
+                try {
+            // Buka koneksi ke database
+            buka_koneksi();
+
+            // Membuat statement untuk eksekusi SQL
+            Statement s = koneksi.createStatement();
+
+            // Query untuk mendapatkan menu berdasarkan ID
+            String sql = "SELECT p.id AS id_penjualan, SUM(dp.total_harga) AS total_pendapatan " +
+            "FROM penjualan p JOIN detail_penjualan dp ON p.id = dp.id_penjualan WHERE DATE(p.tanggal) ='" + tanggal + "'" +
+            "GROUP BY p.id, DATE(p.tanggal) ORDER BY tanggal, p.id;";
+            
+            ResultSet r = s.executeQuery(sql);
+
+            // Periksa apakah hasil query tidak kosong
+            while (r.next()) {
+                Object[] o = new Object[2];
+                o[0] = r.getString("id_penjualan");
+                o[1] = r.getString("total_pendapatan");
+                modelHistori.addRow(o);
+            }
+
+            // Tutup result set dan statement
+            r.close();
+            s.close();
+        } catch (SQLException e) {
+            // Tampilkan pesan kesalahan jika terjadi masalah
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     
     private void tampilkanKategori(){
         try {
@@ -824,11 +930,16 @@ public class KasirCafe extends javax.swing.JFrame {
                     }
                 }
             });
+            
+ 
+            
         } catch (SQLException e) {
             // Tampilkan pesan kesalahan jika terjadi masalah
             JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+
     
     private void getMenuByKategori(int idKategori){
         try {
@@ -905,6 +1016,7 @@ public class KasirCafe extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
@@ -926,7 +1038,11 @@ public class KasirCafe extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTableHistori;
     private javax.swing.JTable jTableItem;
     private javax.swing.JTable jTableKategori;
     private javax.swing.JTable jTableMenu;
