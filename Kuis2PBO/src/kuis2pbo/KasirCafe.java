@@ -26,6 +26,8 @@ public class KasirCafe extends javax.swing.JFrame {
     private DefaultTableModel modelKategori;
     private DefaultTableModel modelMenu;
     private DefaultTableModel modelHistori;
+    private DefaultTableModel modelDetail;
+
     /**
      * Creates new form KasirCafe
      */
@@ -59,6 +61,13 @@ public class KasirCafe extends javax.swing.JFrame {
         modelHistori.addColumn("ID Transaksi");
         modelHistori.addColumn("Total Pendapatan");
         this.jTableHistori.setModel(modelHistori);
+        
+        modelDetail = new DefaultTableModel();
+        modelDetail.addColumn("ID Transaksi");
+        modelDetail.addColumn("Menu");
+        modelDetail.addColumn("QTY");
+        modelDetail.addColumn("Total Harga");
+        this.jTableDetail.setModel(modelDetail);
     }
     
     private void addColoumnKategori(DefaultTableModel modelKategori){
@@ -148,7 +157,7 @@ public class KasirCafe extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         jTableHistori = new javax.swing.JTable();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jTableDetail = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -463,7 +472,7 @@ public class KasirCafe extends javax.swing.JFrame {
         ));
         jScrollPane5.setViewportView(jTableHistori);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jTableDetail.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -474,7 +483,7 @@ public class KasirCafe extends javax.swing.JFrame {
                 "ID Transaksi", "Menu", "Qty", "TotalHarga"
             }
         ));
-        jScrollPane6.setViewportView(jTable2);
+        jScrollPane6.setViewportView(jTableDetail);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -884,12 +893,58 @@ public class KasirCafe extends javax.swing.JFrame {
             // Tutup result set dan statement
             r.close();
             s.close();
+            
+            jTableHistori.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    int row = jTableHistori.getSelectedRow(); // Mendapatkan baris yang diklik
+
+                    if (row != -1) {
+                        // Ambil ID kategori dari kolom pertama (kolom indeks 0)
+                        String id = (jTableHistori.getValueAt(row, 0).toString());
+                        modelDetail.setRowCount(0);
+                        getDetailByIdPenjualan(id); // Panggil metode getMenuByKategori dengan parameter
+                    }
+                }
+            });
         } catch (SQLException e) {
             // Tampilkan pesan kesalahan jika terjadi masalah
             JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
+    private void getDetailByIdPenjualan(String id){
+        try {
+            // Buka koneksi ke database
+            buka_koneksi();
+
+            // Membuat statement untuk eksekusi SQL
+            Statement s = koneksi.createStatement();
+
+            // Query untuk mendapatkan menu berdasarkan ID
+            String sql = "SELECT dp.id AS id_detail, m.nama_menu, dp.qty, dp.total_harga " +
+                "FROM detail_penjualan dp JOIN menu m ON dp.id_menu = m.id WHERE dp.id_penjualan = " + id;
+            
+            ResultSet r = s.executeQuery(sql);
+
+            // Periksa apakah hasil query tidak kosong
+            while (r.next()) {
+                Object[] o = new Object[4];
+                o[0] = r.getString("id_detail");
+                o[1] = r.getString("nama_menu");
+                o[2] = r.getString("qty");
+                o[3] = r.getString("total_harga");
+                modelDetail.addRow(o);
+            }
+
+            // Tutup result set dan statement
+            r.close();
+            s.close();
+        } catch (SQLException e) {
+            // Tampilkan pesan kesalahan jika terjadi masalah
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     
     private void tampilkanKategori(){
         try {
@@ -1041,7 +1096,7 @@ public class KasirCafe extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTableDetail;
     private javax.swing.JTable jTableHistori;
     private javax.swing.JTable jTableItem;
     private javax.swing.JTable jTableKategori;
